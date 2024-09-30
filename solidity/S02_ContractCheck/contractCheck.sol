@@ -31,14 +31,14 @@ contract GoodContractCheck is ERC20 {
     constructor() ERC20("", "") {}
 
     // 利用 extcodesize 检查是否为合约
-    function isContract(address account) public view returns (bool) {
+    function isNotContract(address account) public view returns (bool) {
         // tx.origin 是原始交易的发送者地址，不受任何中间合约调用的影响
         return account == tx.origin && msg.sender == account;
     }
 
     // mint函数，只有非合约地址能调用（）
     function mint() public {
-        require(isContract(msg.sender), "Only EOA allowed!");
+        require(isNotContract(msg.sender), "Only EOA allowed!");
         _mint(msg.sender, 100);
     }
 }
