@@ -23,6 +23,15 @@ contract VictimCase {
         balanceOf[msg.sender] = 0;
     }
 
+    function badwithdraw() external {
+        uint256 balance = balanceOf[msg.sender]; // 获取余额
+        require(balance > 0, "Insufficient balance");
+        emit Withdraw(msg.sender, balance);
+        (bool success, ) = msg.sender.call{value: balance}("");
+        // 更新余额
+        balanceOf[msg.sender] = 0;
+    }
+
     // 获取银行合约的余额
     function getBalance() external view returns (uint256) {
         return address(this).balance;
