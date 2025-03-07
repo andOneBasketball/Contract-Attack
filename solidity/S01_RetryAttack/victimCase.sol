@@ -23,6 +23,17 @@ contract VictimCase {
         balanceOf[msg.sender] = 0;
     }
 
+    // 提取msg.sender的全部ether
+    function goodwithdraw() external {
+        uint256 balance = balanceOf[msg.sender]; // 获取余额
+        require(balance > 0, "Insufficient balance");
+        emit Withdraw(msg.sender, balance);
+        // 先更新余额
+        balanceOf[msg.sender] = 0;
+        (bool success, ) = msg.sender.call{value: balance}("");
+        require(success, "Failed to send Ether");
+    }
+
     function badwithdraw() external {
         uint256 balance = balanceOf[msg.sender]; // 获取余额
         require(balance > 0, "Insufficient balance");
